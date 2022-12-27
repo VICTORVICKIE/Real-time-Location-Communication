@@ -1,4 +1,4 @@
-# Location Share
+# Real-time-Location-Communication
 
 This Project is intended to showcase Asynchronous communication between Python Server and Android Kotlin Application
 
@@ -20,7 +20,7 @@ To run the server, execute the following command:
 
 The server will start listening on the host and port specified in the LocationShareServer class. In the current implementation, the host is set to '', which means the server will listen on all available interfaces. The port is set to 5555.
 
-The server uses a logger to log events and errors to a file location_share_server.log in the logs directory. The logger logs messages with the following format: _`[timestamp] - level - message`_
+The server uses a logger to log events and errors to a file location*share_server.log in the logs directory. The logger logs messages with the following format: *`[timestamp] - level - message`\_
 where timestamp is the time at which the log message was generated, level is the log level (e.g. DEBUG, INFO, WARNING, ERROR) and message is the log message.
 
 The server maintains a list of connected clients, stored in the _`_clients dictionary`_. The keys of the dictionary are the client identifiers, which are in the format _`address:port`_. The values are tuples containing the _`reader and writer objects`_ for each client.
