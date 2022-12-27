@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LocationShareApp</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send">Send</string>
+    <string name="enter_message_here">Enter message here</string>
+    <string name="host">Host</string>
+    <string name="port">Port</string>
+    <string name="connect">Connect</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoidmljdG9yZHZpY2tpZSIsImEiOiJjbGJ2eGFrZDkwMzh4M29xbzZtY3Z4NnYyIn0.gELH5wacYX1-8rEmjyJGOA</string>
+    <string name="button">Button</string>
+</resources>
