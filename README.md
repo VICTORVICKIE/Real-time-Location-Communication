@@ -18,22 +18,22 @@ To run the server, execute the following command:
 
 -   **Explanation**
 
-The server will start listening on the host and port specified in the LocationShareServer class. In the current implementation, the host is set to '', which means the server will listen on all available interfaces. The port is set to 5555.
+The server will start listening on the host and port specified in the LocationShareServer class. In the current implementation, the host is set to "", which means the server will listen on all available interfaces. The port is set to 5555.
 
-The server uses a logger to log events and errors to a file location*share_server.log in the logs directory. The logger logs messages with the following format: *`[timestamp] - level - message`\_
+The server uses a logger to log events and errors to a file location*share_server.log in the logs directory. The logger logs messages with the following format: *`[timestamp] - level - message`*
 where timestamp is the time at which the log message was generated, level is the log level (e.g. DEBUG, INFO, WARNING, ERROR) and message is the log message.
 
-The server maintains a list of connected clients, stored in the _`_clients dictionary`_. The keys of the dictionary are the client identifiers, which are in the format _`address:port`_. The values are tuples containing the _`reader and writer objects`_ for each client.
+The server maintains a list of connected clients, stored in the *`_clients dictionary`*. The keys of the dictionary are the client identifiers, which are in the format *`address:port`*. The values are tuples containing the _`reader and writer objects`_ for each client.
 
-When a client connects to the server, the **_`handle_client`_** method is called with the reader and writer objects as arguments. The method adds the client to the \_clients dictionary and starts a task to receive location updates from the client using the _`recieve_location`_ method.
+When a client connects to the server, the **`handle_client`** method is called with the reader and writer objects as arguments. The method adds the client to the *_clients dictionary* and starts a task to receive location updates from the client using the *`recieve_location`* method.
 
-The **_`recieve_location`_** method reads data from the reader object in chunks of 1024 bytes and decodes it to a string. If the received data is empty, the method breaks out of the loop and closes the connection with the client. If the received data is not empty, the method broadcasts the location update to all other clients using the _`broadcast_location`_ method.
+The ***`recieve_location`*** method reads data from the reader object in chunks of 1024 bytes and decodes it to a string. If the received data is empty, the method breaks out of the loop and closes the connection with the client. If the received data is not empty, the method broadcasts the location update to all other clients using the _`broadcast_location`_ method.
 
-The **_`broadcast_location`_** method sends the **_`location`_** update to all clients in the \_clients dictionary, except for the sender. The location update is sent as a string in the format sender -- location, where sender is the client identifier and location is the location update received from the client.
+The ***`broadcast_location`*** method sends the ***`location`*** update to all clients in the \_clients dictionary, except for the sender. The location update is sent as a string in the format sender -- location, where sender is the client identifier and location is the location update received from the client.
 
 ## Android Client App
 
-The server is intended to be used with any client, here Kotlin Android client app that uses AsynchronousSocketChannel with coroutine is utilized and Mapbox for maps. The app sends location updates to the server using the **_`java.nio`_** library and receives updates from other clients using the same library. The app displays the received location updates on a Mapbox mapview.
+The server is intended to be used with any client, here Kotlin Android client app that uses AsynchronousSocketChannel with coroutine is utilized and Mapbox for maps. The app sends location updates to the server using the ***`java.nio`*** library and receives updates from other clients using the same library. The app displays the received location updates on a Mapbox mapview.
 
     dependencies {
         // Other dependencies required
