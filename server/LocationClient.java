@@ -8,8 +8,8 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class ChatClient {
-    private static final String HOST = "127.0.0.1";// "150.230.140.227";
+public class LocationClient {
+    private static final String HOST = "localhost";
     private static final int PORT = 5555;
 
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
