@@ -30,15 +30,15 @@ class LocationShareServer:
         path: Path = Path(os.path.join(os.getcwd(), "logs"))
         path.mkdir(parents=True, exist_ok=True)
 
-        logger = logging.getLogger('Location Share Server')
+        logger = logging.getLogger("Location Share Server")
         logger.setLevel(logging.DEBUG)
 
-        file_handler = logging.FileHandler(
-            filename='./logs/location_share_server.log')
+        file_handler = logging.FileHandler("./logs/location_share_server.log")
+
         file_handler.setLevel(logging.DEBUG)
 
-        formatter = logging.Formatter(
-            '[%(asctime)s] - %(levelname)s - %(message)s', "%Y-%m-%d %H:%M:%S")
+        formatter = logging.Formatter("[%(asctime)s] - %(levelname)s - %(message)s",
+                                      "%Y-%m-%d %H:%M:%S")
 
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
@@ -92,7 +92,7 @@ class LocationShareServer:
                     self.logger.error(e)
 
 
-if __name__ == '__main__':
-    location_share_server = LocationShareServer('', 5555)
+if __name__ == "__main__":
+    location_share_server = LocationShareServer("", 5555)
     loop = asyncio.get_event_loop()
     loop.run_until_complete(location_share_server.start())
