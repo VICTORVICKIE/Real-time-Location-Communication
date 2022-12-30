@@ -8,4 +8,5 @@
     <string name="connect">Connect</string>
     <string name="mapbox_access_token">pk.eyJ1IjoidmljdG9yZHZpY2tpZSIsImEiOiJjbGJ2eGFrZDkwMzh4M29xbzZtY3Z4NnYyIn0.gELH5wacYX1-8rEmjyJGOA</string>
     <string name="button">Button</string>
+    <string name="todo">TODO</string>
 </resources>

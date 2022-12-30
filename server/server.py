@@ -1,7 +1,8 @@
 import asyncio
-import os
 import logging
+import os
 from pathlib import Path
+
 # firewall-cmd --zone=public --permanent --remove-port=80/tcp
 # firewall-cmd --reload
 
@@ -32,14 +33,15 @@ class LocationShareServer:
         logger = logging.getLogger('Location Share Server')
         logger.setLevel(logging.DEBUG)
 
-        fh = logging.FileHandler(filename=f'./logs/location_share_server.log')
-        fh.setLevel(logging.DEBUG)
+        file_handler = logging.FileHandler(
+            filename='./logs/location_share_server.log')
+        file_handler.setLevel(logging.DEBUG)
 
         formatter = logging.Formatter(
             '[%(asctime)s] - %(levelname)s - %(message)s', "%Y-%m-%d %H:%M:%S")
 
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
         return logger
 
@@ -47,7 +49,7 @@ class LocationShareServer:
         try:
             server = await asyncio.start_server(self.handle_client, self.host, self.port)
             async with server:
-                self.logger.info(f"Launching server")
+                self.logger.info("Launching server")
                 await server.serve_forever()
         except Exception as e:
             self.logger.error(e)
@@ -68,11 +70,12 @@ class LocationShareServer:
             while True:
                 location_byte: bytes = await reader.read(1024)
                 location: str = location_byte.decode().strip()
-                if not location:
+                if location:
+                    await self.broadcast_location(identifier, location)
+                else:
                     break
-                await self.broadcast_location(identifier, location)
         except Exception as e:
-            print(e)
+            self.logger.error(e)
         finally:
             self.logger.info(f"{identifier} -- disconnected")
             del self._clients[identifier]
@@ -90,6 +93,6 @@ class LocationShareServer:
 
 
 if __name__ == '__main__':
-    server = LocationShareServer('', 5555)
+    location_share_server = LocationShareServer('', 5555)
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(server.start())
+    loop.run_until_complete(location_share_server.start())

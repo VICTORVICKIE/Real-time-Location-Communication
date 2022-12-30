@@ -1,6 +1,6 @@
 package dev.victor.locationshareapp
-import android.app.AlertDialog
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -15,11 +15,13 @@ import com.google.gson.JsonElement
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.Style
+import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.AnnotationPlugin
 import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.*
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.logo.logo
@@ -106,7 +108,7 @@ class TestMapActivity : AppCompatActivity() {
 
 
         markerList =  ArrayList()
-        val bitmap = convertDrawableToBitmap(AppCompatResources.getDrawable(this, R.drawable.marker))
+        val bitmap = createMarker()
         for (i in 0 until  2){
 
             val mObe = JSONObject()
@@ -114,36 +116,60 @@ class TestMapActivity : AppCompatActivity() {
             val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(longitudeList[i], latitudeList[i]))
                 .withData(Gson().fromJson(mObe.toString(), JsonElement::class.java))
-                .withIconImage(bitmap!!)
+                .withIconImage(bitmap)
+                .withIconAnchor(IconAnchor.BOTTOM)
             markerList.add(pointAnnotationOptions)
         }
 
         pointAnnotationManager?.create(markerList)
 
     }
+
+    private fun createMarker(): Bitmap {
+        val circleBitmap = BitmapFactory.decodeResource(resources, R.drawable.circle)
+        val avatarBitmap = BitmapFactory.decodeResource(resources, R.drawable.avatar)
+        val scaledBitmap = Bitmap.createScaledBitmap(avatarBitmap,
+            146, 146, false)
+
+        // Create a new bitmap and canvas for the output image
+        val resultBitmap = Bitmap.createBitmap(circleBitmap.width, circleBitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(resultBitmap)
+
+        // Draw the white circle image on the canvas
+        canvas.drawBitmap(circleBitmap, 0f, 0f, null)
+
+        // Draw the user avatar image on top of the white circle image
+        val x = (circleBitmap.width - scaledBitmap.width) / 2  // center the avatar horizontally
+        val y = (circleBitmap.height - scaledBitmap.height) / 4  // center the avatar vertically
+        canvas.drawBitmap(scaledBitmap, x.toFloat(), y.toFloat(), null)
+
+        return resultBitmap
+    }
+
     private fun clearAnnotation(){
         markerList = ArrayList()
         pointAnnotationManager?.deleteAll()
     }
-    private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
-        if (sourceDrawable == null) {
-            return null
-        }
-        return if (sourceDrawable is BitmapDrawable) {
-            sourceDrawable.bitmap
-        } else {
-// copying drawable object to not manipulate on the same reference
-            val constantState = sourceDrawable.constantState ?: return null
-            val drawable = constantState.newDrawable().mutate()
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap
-        }
-    }
-
+    
+    
+//    private fun convertDrawableToBitmap(sourceDrawable: Drawable?): Bitmap? {
+//        if (sourceDrawable == null) {
+//            return null
+//        }
+//        return if (sourceDrawable is BitmapDrawable) {
+//            sourceDrawable.bitmap
+//        } else {
+//// copying drawable object to not manipulate on the same reference
+//            val constantState = sourceDrawable.constantState ?: return null
+//            val drawable = constantState.newDrawable().mutate()
+//            val bitmap: Bitmap = Bitmap.createBitmap(
+//                drawable.intrinsicWidth, drawable.intrinsicHeight,
+//                Bitmap.Config.ARGB_8888
+//            )
+//            val canvas = Canvas(bitmap)
+//            drawable.setBounds(0, 0, canvas.width, canvas.height)
+//            drawable.draw(canvas)
+//            return bitmap
+//        }
+//    }
 }

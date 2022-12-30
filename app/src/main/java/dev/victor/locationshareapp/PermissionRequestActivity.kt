@@ -11,87 +11,79 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class PermissionRequestActivity : AppCompatActivity() {
+class PermissionRequestActivity : AppCompatActivity()
+{
     private val locationPerm = 1
     private val bgLocationPerm = 2
     private lateinit var ok: Button
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
             && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
             // All necessary location permissions are granted
             startHostActivity()
-        } else {
+        }
+        else
+        {
+            // One or more necessary location permissions are not granted
             setContentView(R.layout.activity_permission_request)
             ok = findViewById(R.id.location_permission)
-            ok.setOnClickListener {
-                checkPermission()
-            }
-            // One or more necessary location permissions are not granted
+            ok.setOnClickListener {checkPermission()}
         }
 
 
     }
 
-    private fun checkPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this@PermissionRequestActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+    private fun checkPermission()
+    {
+        if (ContextCompat.checkSelfPermission(this@PermissionRequestActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
             // Fine Location permission is granted
             // Check if current android version >= 11, if >= 11 check for Background Location permission
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (ContextCompat.checkSelfPermission(
-                        this@PermissionRequestActivity,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            {
+                if (ContextCompat.checkSelfPermission(this@PermissionRequestActivity, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
                     startHostActivity()
                     // Background Location Permission is granted so do your work here
-                } else {
+                } else
+                {
                     // Ask for Background Location Permission
                     askPermissionForBackgroundUsage()
                 }
             }
-        } else {
+        }
+        else
+        {
             // Fine Location Permission is not granted so ask for permission
             askForLocationPermission()
         }
     }
 
-    private fun askForLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                this@PermissionRequestActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        ) {
+    private fun askForLocationPermission()
+    {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this@PermissionRequestActivity, Manifest.permission.ACCESS_FINE_LOCATION))
+        {
             AlertDialog.Builder(this)
                 .setTitle("Permission Needed!")
                 .setMessage("Location Permission Needed!")
-                .setPositiveButton(
-                    "OK"
-                ) { dialog, which ->
-                    ActivityCompat.requestPermissions(
-                        this@PermissionRequestActivity,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        locationPerm
-                    )
+                .setPositiveButton("OK")
+                { dialog, which ->
+                    ActivityCompat.requestPermissions(this@PermissionRequestActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPerm)
                 }
                 .setNegativeButton(
                     "CANCEL"
                 ) { dialog, which ->
                     // Permission is denied by the user
-                }
-                .create().show()
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                locationPerm
-            )
+                }.create().show()
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPerm)
         }
     }
 
